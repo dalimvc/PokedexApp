@@ -9,6 +9,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//to enable CORS for the React app running on localhost:3000
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+      builder =>
+      {
+          builder.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                     .AllowAnyHeader()
+           .AllowAnyMethod();
+      });
+});
+
 ///////////////
 ///////////////
 ///////////////
@@ -25,6 +37,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//to allow CORS and enable HTTPS redirection and authorization
+//!!!!!important
+app.UseCors("AllowReactApp");
 
 app.UseHttpsRedirection();
 
